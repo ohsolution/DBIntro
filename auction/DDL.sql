@@ -1,0 +1,178 @@
+DROP DATABASE IF EXISTS auction_18314788;
+
+CREATE DATABASE IF NOT EXISTS auction_18314788;
+
+USE auction_18314788;
+
+CREATE TABLE user_info
+    (
+        user_id INT NOT NULL AUTO_INCREMENT,
+        password NVARCHAR(20) NOT NULL,
+        first_name NVARCHAR(20) NOT NULL,
+        last_name NVARCHAR(20) NOT NULL,
+        email NVARCHAR(320) NOT NULL,
+        ns_item INT UNSIGNED DEFAULT 0,
+        np_item INT UNSIGNED DEFAULT 0,
+        seller_rating DECIMAL(3,2) DEFAULT 0.00,
+        PRIMARY KEY (user_id)
+    );
+
+CREATE TABLE seller
+    (
+        user_id INT,
+        item_id INT,
+        PRIMARY KEY (user_id,item_id),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id)
+    );
+
+CREATE TABLE buyer
+    (
+        user_id INT,
+        bid_info_id INT,
+        PRIMARY KEY (user_id,bid_info_id),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id)
+    );
+
+    
+CREATE TABLE item
+    (
+        item_id INT NOT NULL AUTO_INCREMENT,
+        posted_date DATE,
+        descrpition TEXT,
+        condition_id INT,
+        status_id INT,
+        history_id INT,
+        PRIMARY KEY(item_id)
+    );
+
+CREATE TABLE watchlist
+    (
+        user_id INT,
+        item_id INT,
+        PRIMARY KEY (user_id,item_id),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id),
+        FOREIGN KEY (item_id) REFERENCES item(item_id)
+            ON DELETE CASCADE
+    );
+
+
+    
+CREATE TABLE condi
+    (
+        condition_id INT NOT NULL AUTO_INCREMENT,
+        item_state NVARCHAR(8),
+        PRIMARY KEY(condition_id)
+    );
+
+CREATE TABLE status
+    (
+        status_id INT NOT NULL AUTO_INCREMENT,
+        bid_state NVARCHAR(8),
+        PRIMARY KEY(status_id)
+    );
+
+    
+CREATE TABLE category
+    (
+        item_id INT,
+        item_category NVARCHAR(8),
+        PRIMARY KEY (item_id, item_category),
+        FOREIGN KEY (item_id) REFERENCES item(item_id)
+            ON DELETE CASCADE
+    );
+
+CREATE TABLE bid_info
+    (
+        item_id INT,
+        bid_info_id INT NOT NULL AUTO_INCREMENT,
+        buy_now_price INT,
+        cur_price INT DEFAULT 0,
+        bid_num INT DEFAULT 0,
+        ending_date TIMESTAMP,
+        invoice_id INT,
+        PRIMARY KEY (bid_info_id),
+        FOREIGN KEY (item_id) REFERENCES item(item_id)
+            ON DELETE CASCADE
+    );
+
+CREATE TABLE bid
+    (
+        user_id INT,
+        bid_info_id INT,
+        bid_price INT,
+        bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id,bid_info_id,bid_price),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id),
+        FOREIGN KEY (bid_info_id) REFERENCES bid_info(bid_info_id)
+            ON DELETE CASCADE
+     );
+
+
+CREATE TABLE invoice
+    (
+        invoice_id INT NOT NULL AUTO_INCREMENT,
+        seller_id INT,
+        buyer_id INT,
+        successful_bid_price INT NOT NULL,
+        buyer_price INT NOT NULL,
+        seller_price INT NOT NULL,
+        fees INT NOT NULL,
+        transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (invoice_id),
+        FOREIGN KEY (seller_id) REFERENCES user_info(user_id),
+        FOREIGN KEY (buyer_id) REFERENCES user_info(user_id)
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
