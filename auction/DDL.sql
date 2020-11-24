@@ -7,13 +7,15 @@ USE auction_18314788;
 CREATE TABLE user_info
     (
         user_id INT NOT NULL AUTO_INCREMENT,
-        password NVARCHAR(20) NOT NULL,
+        password NVARCHAR(20) NOT NULL ,
         first_name NVARCHAR(20) NOT NULL,
         last_name NVARCHAR(20) NOT NULL,
         email NVARCHAR(320) NOT NULL,
         ns_item INT UNSIGNED DEFAULT 0,
         np_item INT UNSIGNED DEFAULT 0,
         seller_rating DECIMAL(3,2) DEFAULT 0.00,
+        CONSTRAINT passc UNIQUE (password),
+        CONSTRAINT emailc UNIQUE (email),
         PRIMARY KEY (user_id)
     );
 
