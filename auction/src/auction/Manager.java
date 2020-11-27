@@ -13,7 +13,7 @@ public final class Manager {
 	public static boolean top_level() throws Exception
 	{
 		Top_menu top = new Top_menu();
-		while(!top.exec());
+		top.exec();
 
 		switch(top.index)
 		{
@@ -24,7 +24,7 @@ public final class Manager {
 			break;
 		case 2:
 			Sign_up();
-			Login(0);
+			while(Login(0)==false);
 			break;
 		case 4:
 			return false;	
@@ -51,7 +51,8 @@ public final class Manager {
 	public static void Home()
 	{
 		Home_menu home = new Home_menu(root);
-		while(!home.exec());
+		home.exec();
+
 		switch(home.index)
 		{
 		case 1:
@@ -70,5 +71,6 @@ public final class Manager {
 	public static void sell_item()
 	{
 		Sell_item_menu sell_menu = new Sell_item_menu();
+		sell_menu.exec();
 	}
 }

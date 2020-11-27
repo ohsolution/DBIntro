@@ -25,14 +25,10 @@ public class Home_menu extends Menu
 		this.pLine(6,"Quit","");
 	}
 	
-	public boolean exec()
+	public void exec()
 	{
 		show_home_menu();
-		String tmp = this.pQuest(">");
-		if(!tmp.equals(null) && !tmp.equals("")) index = Integer.parseInt(tmp);				
-		if(1 <= this.index && 6>=this.index) return true;
-		return false;
-		
+		while((this.index = this.getInt(6))==-1) show_home_menu();		
 	}
 	
 }

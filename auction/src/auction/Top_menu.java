@@ -14,13 +14,10 @@ public class Top_menu extends Menu{
 		this.pLine(4, "Quit","");
 	}
 	
-	public boolean exec() throws Exception
+	public void exec()
 	{
 		show_top_menu();
-		String tmp = this.pQuest(">");
-		if(!tmp.equals(null) && !tmp.equals("")) index = Integer.parseInt(tmp);		
-		if(1 <= this.index && 4>=this.index) return true;
-		return false;
+		while((this.index = this.getInt(4))==-1) show_top_menu();	
 	}
 	
 }
