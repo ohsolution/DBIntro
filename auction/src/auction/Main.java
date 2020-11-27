@@ -4,6 +4,12 @@ public class Main{
 	public static void main(String[] args) throws Exception
 	{
 		Driver.connect();
-		Manager.top_level();		
+		if(!Manager.top_level()) 
+		{
+			Driver.close();
+			return;
+		}
+		Manager.Home();
+
 	}
 }

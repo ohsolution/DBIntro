@@ -63,4 +63,9 @@ public final class Driver
 	  return ret;
   
   }
+
+  public static void close()
+  {
+      ;
+  }
 }

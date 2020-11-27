@@ -4,6 +4,13 @@ CREATE DATABASE IF NOT EXISTS auction_18314788;
 
 USE auction_18314788;
 
+CREATE TABLE admin
+    (
+        email NVARCHAR(320) NOT NULL,
+        password NVARCHAR(20) NOT NULL,
+        PRIMARY KEY (password)
+    );
+
 CREATE TABLE user_info
     (
         user_id INT NOT NULL AUTO_INCREMENT,
@@ -19,6 +26,7 @@ CREATE TABLE user_info
         PRIMARY KEY (user_id)
     );
 
+/*
 CREATE TABLE seller
     (
         user_id INT,
@@ -34,17 +42,19 @@ CREATE TABLE buyer
         PRIMARY KEY (user_id,bid_info_id),
         FOREIGN KEY (user_id) REFERENCES user_info(user_id)
     );
-
+*/
     
 CREATE TABLE item
     (
         item_id INT NOT NULL AUTO_INCREMENT,
-        posted_date DATE,
+        user_id INT,
+        posted_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         descrpition TEXT,
         condition_id INT,
-        status_id INT,
-        history_id INT,
-        PRIMARY KEY(item_id)
+        #status NVARCHAR(20),
+        #history_id INT,
+        PRIMARY KEY(item_id),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id)
     );
 
 CREATE TABLE watchlist
@@ -66,12 +76,14 @@ CREATE TABLE condi
         PRIMARY KEY(condition_id)
     );
 
+    /*
 CREATE TABLE status
     (
         status_id INT NOT NULL AUTO_INCREMENT,
         bid_state NVARCHAR(8),
         PRIMARY KEY(status_id)
     );
+    */
 
     
 CREATE TABLE category
@@ -104,9 +116,7 @@ CREATE TABLE bid
         bid_price INT,
         bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id,bid_info_id,bid_price),
-        FOREIGN KEY (user_id) REFERENCES user_info(user_id),
-        FOREIGN KEY (bid_info_id) REFERENCES bid_info(bid_info_id)
-            ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id)
      );
 
 

@@ -16,7 +16,9 @@ public class Top_menu extends Menu{
 	
 	public boolean exec() throws Exception
 	{
-		index = Integer.parseInt(this.pQuest(">"));		
+		show_top_menu();
+		String tmp = this.pQuest(">");
+		if(!tmp.equals(null) && !tmp.equals("")) index = Integer.parseInt(tmp);		
 		if(1 <= this.index && 4>=this.index) return true;
 		return false;
 	}
