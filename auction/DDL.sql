@@ -49,7 +49,7 @@ CREATE TABLE item
         item_id INT NOT NULL AUTO_INCREMENT,
         user_id INT,
         posted_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        descrpition TEXT,
+        description TEXT,
         condition_id INT,
         category_id INT,
         #status NVARCHAR(20),
@@ -101,6 +101,7 @@ CREATE TABLE bid_info
         buy_now_price INT,
         cur_price INT DEFAULT 0,
         bid_num INT DEFAULT 0,
+        highest_bidder NVARCHAR(20),
         ending_date TIMESTAMP,
         invoice_id INT,
         PRIMARY KEY (bid_info_id),
@@ -111,6 +112,7 @@ CREATE TABLE bid_info
 CREATE TABLE bid
     (
         user_id INT,
+        bidder_name NVARCHAR(20),
         bid_info_id INT,
         bid_price INT,
         bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

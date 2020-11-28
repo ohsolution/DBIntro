@@ -9,7 +9,6 @@ public class Main{
 			Driver.close();
 			return;
 		}
-		Manager.Home();
-
+		while(Manager.Home());
 	}
 }

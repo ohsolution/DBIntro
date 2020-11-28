@@ -3,7 +3,6 @@ package auction;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Sell_item_menu extends Menu 
 {
@@ -86,7 +85,7 @@ public class Sell_item_menu extends Menu
 						+'\'' + Integer.toString(category) + '\'';
 						
 
-		int itid = Driver.insert("item","user_id,descrpition,condition_id,category_id", values,"item_id");
+		int itid = Driver.insert("item","user_id,description,condition_id,category_id", values,"item_id");
 
 		values = '\'' + Integer.toString(itid) + '\'' + ','
 		+'\'' + Integer.toString(buyPrice)+ '\''+','
