@@ -23,7 +23,7 @@ public final class Manager {
 			root = (top.index == 3);
 			break;
 		case 2:
-			Sign_up();
+			while(!Sign_up());
 			while(Login(0)==false);
 			break;
 		case 4:
@@ -33,10 +33,10 @@ public final class Manager {
 		return true;
 	}
 	
-	public static void Sign_up() throws Exception
+	public static boolean Sign_up() throws Exception
 	{
 		Sign_up_menu sign = new Sign_up_menu();
-		sign.exec();
+		return sign.exec();
 		
 	}
 	
@@ -71,6 +71,6 @@ public final class Manager {
 	public static void sell_item()
 	{
 		Sell_item_menu sell_menu = new Sell_item_menu();
-		sell_menu.exec();
+		sell_menu.exec(id);
 	}
 }

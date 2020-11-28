@@ -17,7 +17,7 @@ public class Sign_up_menu extends Menu{
 		this.pLine(-1, "password" , password);
 	}
 	
-	public void exec() throws Exception
+	public boolean exec() throws Exception
 	{
 		show_sign_menu();
 		first_name = this.pQuest("Enter the first name : ");
@@ -35,12 +35,13 @@ public class Sign_up_menu extends Menu{
 						+'\'' + email + '\'';
 					
 		
-		if(Driver.insert("user_info","password,first_name,last_name,email",values)==false)
+		if(Driver.insert("user_info","password,first_name,last_name,email",values,"")==-1)
 		{
-			System.out.println("email or password is already exist");		
+			System.out.println("email or password is already exist");
+			return false;		
 		}
 		
-		return;
+		return true;
 	}
 	
 }

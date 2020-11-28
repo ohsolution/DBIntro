@@ -51,6 +51,7 @@ CREATE TABLE item
         posted_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         descrpition TEXT,
         condition_id INT,
+        category_id INT,
         #status NVARCHAR(20),
         #history_id INT,
         PRIMARY KEY(item_id),
@@ -72,7 +73,7 @@ CREATE TABLE watchlist
 CREATE TABLE condi
     (
         condition_id INT NOT NULL AUTO_INCREMENT,
-        item_state NVARCHAR(8),
+        item_state NVARCHAR(40),
         PRIMARY KEY(condition_id)
     );
 
@@ -88,11 +89,9 @@ CREATE TABLE status
     
 CREATE TABLE category
     (
-        item_id INT,
-        item_category NVARCHAR(8),
-        PRIMARY KEY (item_id, item_category),
-        FOREIGN KEY (item_id) REFERENCES item(item_id)
-            ON DELETE CASCADE
+        category_id INT NOT NULL AUTO_INCREMENT,
+        item_category NVARCHAR(40),
+        PRIMARY KEY(category_id)
     );
 
 CREATE TABLE bid_info

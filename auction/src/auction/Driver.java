@@ -12,7 +12,8 @@ import java.util.Properties;
 public final class Driver 
 {
 	static Connection dbco;
-	static Statement stmt; 
+  static Statement stmt;
+   
 	static ResultSet ret;
   public static void connect() {
 	  
@@ -36,18 +37,32 @@ public final class Driver
     }
   }
   
-  public static boolean insert(String table,String attr, String values)
+  public static int insert(String table,String attr, String values,String key)
   {
+    int ret = -1;
+
 	  try 
 	  {
-		  String ins_query = "INSERT INTO " + table + " ("+attr+") "+"values ("+values+")";
-		  stmt.executeUpdate(ins_query);
+      String ins_query = "INSERT INTO " + table + " ("+attr+") "+"values ("+values+")";      
+      
+      if(key=="") ret = stmt.executeUpdate(ins_query);
+      else 
+      {
+        stmt.executeUpdate(ins_query,new String[] {key});
+
+        ResultSet rs = stmt.getGeneratedKeys();
+  
+        if(rs.next()) ret = (int)rs.getLong(1);
+      }
+      
 	  }
 	  catch (Exception exc)
 	  {
-		  return false;
-	  }
-	  return true;
+      System.out.println(exc.getMessage());
+		  return -1;
+    }
+    
+	  return (key=="" ? 0 : ret);
   }
   
   public static ResultSet query(String str)

@@ -2,6 +2,8 @@
 package auction;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Sell_item_menu extends Menu 
 {
@@ -10,6 +12,8 @@ public class Sell_item_menu extends Menu
 	public String description = "";
 	public int buyPrice = 0;
 	public String enddate = "";
+	public Timestamp ENDDATE;
+	SimpleDateFormat transistor = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public void show_sell_item_menu(int idx)
 	{
@@ -44,7 +48,7 @@ public class Sell_item_menu extends Menu
 		
 	}
 	
-	public void exec()
+	public void exec(int id)
 	{
 		int level = 1;
 		show_sell_item_menu(level);
@@ -69,18 +73,33 @@ public class Sell_item_menu extends Menu
 		++level;
 
 		show_sell_item_menu(level);
+
 		while(!check())
 		{
-			enddate = pQuest("---- bid ending date(yyyy-mm-dd HH:mm): ");
-			
+			enddate = pQuest("---- bid ending date(yyyy-mm-dd HH:mm): ") + ":00";			
 		}
+
+
+		String values = '\'' + Integer.toString(id) + '\'' + ','
+						+'\'' + description + '\'' +','
+						+'\'' + Integer.toString(condition) + '\''+','
+						+'\'' + Integer.toString(category) + '\'';
+						
+
+		int itid = Driver.insert("item","user_id,descrpition,condition_id,category_id", values,"item_id");
+
+		values = '\'' + Integer.toString(itid) + '\'' + ','
+		+'\'' + Integer.toString(buyPrice)+ '\''+','
+		+'\'' + ENDDATE + '\'';
+
+		Driver.insert("bid_info","item_id,buy_now_price,ending_date", values,"");		
 	}
 
 	public boolean check()
-	{
+	{	
 		try 
-		{
-			
+		{			
+			ENDDATE = new Timestamp(transistor.parse(enddate).getTime());
 		} 
 		catch (Exception e) {
 			
@@ -88,5 +107,6 @@ public class Sell_item_menu extends Menu
 		}
 
 		return true;
+		
 	}
 }
