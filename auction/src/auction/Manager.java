@@ -1,15 +1,17 @@
 package auction;
 
+import java.util.ArrayList;
 import java.util.Locale.Category;
 import java.sql.*;
 
 public final class Manager {
 	public static boolean root = false;
 	public static int id = 0;
+	public static String name;
 	
 	public static void clean() 
 	{
-		 //System.out.print("\033[H\033[2J");  
+		 System.out.print("\033[H\033[2J");  
 		 System.out.flush();  
 	}
 	
@@ -47,7 +49,8 @@ public final class Manager {
 	{
 		Login_menu login = new Login_menu();
 		boolean ret = login.exec(idx);
-		id = login.id;		
+		id = login.id;
+		name = login.fn;		
 		return ret;
 	}
 
@@ -87,73 +90,88 @@ public final class Manager {
 		Search_menu search_memu = new Search_menu();
 		search_memu.exec();
 
-		switch(search_memu.index)
+		boolean loop = false;
+
+		do
 		{
-			case 1:
-				search_category();
-				break;
-			case 2:
-				//search_keyword();
-				break;
-			case 3:
-				//search_seller();
-				break;
-			case 4:
-				//search_date();
-				break;
-			case 5:
-				return true;
-			case 6:
-				return false;
-		}
+			switch(search_memu.index)
+			{
+				case 1:
+					loop = search_category();
+					break;
+				case 2:
+					//search_keyword();
+					break;
+				case 3:
+					//search_seller();
+					break;
+				case 4:
+					//search_date();
+					break;
+				case 5:
+					return true;
+				case 6:
+					return false;
+			}
+		}while(loop);
 
 		return true;
 	}
 
-	public static void search_category()
+	public static boolean search_category()
 	{
 		Category_menu category_menu = new Category_menu();
 		category_menu.exec();
 
-		//clean();
+		clean();
 		
 		category_menu.pLine(0, "Search results: Category", "");
 
-		String select = "SELECT description,bid_num,cur_price"
-		+",highest_bidder,posted_date,ending_date from item " 
+		String select = "SELECT bid_info_id,description,bid_num,cur_price"
+		+",highest_bidder,posted_date,ending_date,buy_now_price from item " 
 		+"inner join bid_info using(item_id) where category_id =" 
-		+ Integer.toString(category_menu.index);		
+		+ Integer.toString(category_menu.index)
+		+ " AND user_id <> "
+		+ Integer.toString(id)
+		+ " AND ending_date > CURRENT_TIMESTAMP()";
 
-		try {
-			ResultSet rs = Driver.query(select);	
+		Search_engine se = new Search_engine(1,8);
+		
+		int idx = -1;
 
-			int num = 1;
-
-			while(rs.next())
-			{
-				String arr[] = new String[7];
-
-				arr[0] = '[' + Integer.toString(num++)+']';
-				arr[1] = "    description: ";
-				arr[2] = "    status: ";
-				arr[3] = "    current bidding price: ";
-				arr[4] = "    current highest bidder: ";
-				arr[5] = "    date posted: ";
-				arr[6] = "    bid ending date: ";
-				
-				for(int i=1;i<7;++i) arr[i] += rs.getString(i);
-				arr[2] += " bids";
-
-				for(int i=0;i<7;++i) System.out.println(arr[i]);				
-			}
-		} catch (Exception e) 
+		String q = "--- Which item do you want to bid? (Enter the number or 'B'"
+			+" to go back to the previous menu):";
+		
+		while(idx == -1)
 		{
-			System.out.println(e.getMessage());
+			se.search(select, 1);			
+			idx = category_menu.getTargetInt(q, "B", 1, se.info.size()/3);						
+		}
+		
+		if(idx == 0) return true;
+
+		q = "--- Bidding price? (Enter the price or 'buy' to pay for the buy-it-now price :";
+
+		int mincost = Math.max(se.info.get((idx-1)*3 + 1),1);
+		int buynowcost = se.info.get((idx-1)*3 + 2);
+
+		int cost = -1;
+
+		while(cost ==-1)
+		{
+			cost = category_menu.getTargetInt(q, "buy",mincost,buynowcost);			
 		}
 
-		
-		
+		if(cost == 0) cost = buynowcost;
 
-		
+		String attr = "user_id,bid_info_id,bid_price,bidder_name";
+		String values = "'" + Integer.toString(id) + "', "
+						+ "'" + Integer.toString(se.info.get((idx-1)*3)) + "', "
+						+ "'" + Integer.toString(cost) + "', "
+						+ "'" + name +"'";
+
+		Driver.insert("bid",attr,values,"");
+
+		return false;
 	}
 }

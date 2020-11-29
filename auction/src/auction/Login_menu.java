@@ -7,6 +7,7 @@ public class Login_menu extends Menu
 	public String email = "";
 	public String password = "";
 	public int id = 0;
+	public String fn;
 	
 	public void show_login_menu(int idx)
 	{
@@ -40,7 +41,7 @@ public class Login_menu extends Menu
 	public boolean isvaild(String id,String pw,int idx)
 	{
 		try {
-			String qu = "SELECT email,password,user_id FROM ";
+			String qu = "SELECT email,password,user_id,first_name FROM ";
 			if(idx == 0) qu += "user_info";
 			else qu += "admin";
 
@@ -53,6 +54,7 @@ public class Login_menu extends Menu
 				if((id.equals(dbid)) && (pw.equals(dbpw)))
 				{
 					this.id = ret.getInt("user_id");
+					this.fn = ret.getString("first_name");
 					return true;
 				}
 			}

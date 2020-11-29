@@ -102,7 +102,7 @@ CREATE TABLE bid_info
         cur_price INT DEFAULT 0,
         bid_num INT DEFAULT 0,
         highest_bidder NVARCHAR(20),
-        ending_date TIMESTAMP,
+        ending_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         invoice_id INT,
         PRIMARY KEY (bid_info_id),
         FOREIGN KEY (item_id) REFERENCES item(item_id)
@@ -137,52 +137,20 @@ CREATE TABLE invoice
     );
 
 
+DROP TRIGGER IF EXISTS `auction_18314788`.`bid_update`;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+DELIMITER $$
+CREATE TRIGGER `auction_18314788`.`bid_update` AFTER INSERT ON `bid` FOR EACH ROW
+BEGIN
+	    UPDATE bid_info 
+        SET bid_num = bid_num + 1 
+        where bid_info_id = NEW.bid_info_id;      
+		UPDATE bid_info 
+        SET cur_price = NEW.bid_price,
+        highest_bidder = NEW.bidder_name
+        where bid_info_id = NEW.bid_info_id AND NEW.bid_price > cur_price;       
+END$$
+DELIMITER ;
 
 
 
