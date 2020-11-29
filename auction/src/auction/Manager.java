@@ -87,32 +87,32 @@ public final class Manager {
 
 	public static boolean search_item()
 	{
-		Search_menu search_memu = new Search_menu();
-		search_memu.exec();
-
 		boolean loop = false;
-
 		do
 		{
+			Search_menu search_memu = new Search_menu();
+			search_memu.exec();
+		
 			switch(search_memu.index)
 			{
 				case 1:
 					loop = search_category();
 					break;
 				case 2:
-					//search_keyword();
+					loop = search_keyword();
 					break;
 				case 3:
-					//search_seller();
+					loop = search_seller();
 					break;
 				case 4:
-					//search_date();
+					loop = search_date();
 					break;
 				case 5:
 					return true;
 				case 6:
 					return false;
 			}
+			
 		}while(loop);
 
 		return true;
@@ -135,17 +135,71 @@ public final class Manager {
 		+ Integer.toString(id)
 		+ " AND ending_date > CURRENT_TIMESTAMP()";
 
-		Search_engine se = new Search_engine(1,8);
-		
-		int idx = -1;
+		return ins_bid(new Search_engine(1,8),category_menu,select);
+	}
 
+	public static boolean search_keyword()
+	{
+		Menu menu = new Menu();
+		menu.pLine(0, "Search item by description keyword", "");
+		String pat = menu.pQuest("Search keyword :");
+
+		String select = "SELECT bid_info_id,description,bid_num,cur_price"
+		+",highest_bidder,posted_date,ending_date,buy_now_price from item " 
+		+"inner join bid_info using(item_id) where description like '%" 
+		+ pat + "%'"
+		+ " AND user_id <> "
+		+ Integer.toString(id)
+		+ " AND ending_date > CURRENT_TIMESTAMP()";
+
+		return ins_bid(new Search_engine(1,8),menu,select);
+	}
+
+	public static boolean search_seller()
+	{
+		Menu menu = new Menu();
+		menu.pLine(0, "Search items by seller name", "");
+		String sn = menu.pQuest("Search seller name :");
+
+		String select = "SELECT bid_info_id,description,bid_num,cur_price"
+		+",highest_bidder,posted_date,ending_date,buy_now_price from item " 
+		+"inner join bid_info using(item_id) inner join user_info using(user_id) where first_name = '" 
+		+ sn +"'"
+		+ " AND user_id <> "
+		+ Integer.toString(id)
+		+ " AND ending_date > CURRENT_TIMESTAMP()";
+
+		return ins_bid(new Search_engine(1,8),menu,select);
+	}
+
+	public static boolean search_date()
+	{
+		Menu menu = new Menu();
+		menu.pLine(0, "Search items by date", "");
+		String dn = menu.pQuest("Search by date(yyyy-mm-dd) :");
+
+		String select = "SELECT bid_info_id,description,bid_num,cur_price"
+		+",highest_bidder,posted_date,ending_date,buy_now_price from item " 
+		+"inner join bid_info using(item_id) where posted_date like '" 
+		+ dn +"%'"
+		+ " AND user_id <> "
+		+ Integer.toString(id)
+		+ " AND ending_date > CURRENT_TIMESTAMP()";
+		
+		return ins_bid(new Search_engine(1, 8),menu,select);
+	}
+
+	public static boolean ins_bid(Search_engine se,Menu menu,String select)
+	{
+		int idx = -1;
 		String q = "--- Which item do you want to bid? (Enter the number or 'B'"
+
 			+" to go back to the previous menu):";
 		
 		while(idx == -1)
 		{
 			se.search(select, 1);			
-			idx = category_menu.getTargetInt(q, "B", 1, se.info.size()/3);						
+			idx = menu.getTargetInt(q, "B", 1, se.info.size()/3);						
 		}
 		
 		if(idx == 0) return true;
@@ -159,7 +213,7 @@ public final class Manager {
 
 		while(cost ==-1)
 		{
-			cost = category_menu.getTargetInt(q, "buy",mincost,buynowcost);			
+			cost = menu.getTargetInt(q, "buy",mincost,buynowcost);			
 		}
 
 		if(cost == 0) cost = buynowcost;
