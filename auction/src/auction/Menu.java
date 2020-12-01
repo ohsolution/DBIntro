@@ -10,18 +10,18 @@ public class Menu {
 		if(num < 0) string = String.format("---- %s : ", str);
 		else if(num == 0) string = String.format("----< %s >", str);
 		else string = String.format("----(%d) %s", num,str);			
-		System.out.println(string+" "+str2);		
+		System.out.print(string+" "+str2);		
 	}
 	
 	public String pQuest(String str) {		
-		System.out.print(str + " ");
+		System.out.print(str + "");
 		return sc.nextLine();
 	}
 
 	public int getInt(int upper_bound)
 	{
 		int ret = -1;
-		String tmp = this.pQuest(">");
+		String tmp = this.pQuest("");
 
 		try {
 			if(!tmp.equals(null) && !tmp.equals("")) ret = Integer.parseInt(tmp);	

@@ -9,6 +9,7 @@ public class Main{
 			Driver.close();
 			return;
 		}
-		while(Manager.Home());
+		if(!Manager.root) while(Manager.Home());
+		else while(Manager.admin());
 	}
 }
