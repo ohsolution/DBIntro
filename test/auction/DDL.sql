@@ -81,13 +81,15 @@ CREATE TABLE bid_info
 
 CREATE TABLE bid
     (
+        bid_id INT NOT NULL AUTO_INCREMENT,
         user_id INT,
         bidder_name NVARCHAR(20),
         bid_info_id INT,
         bid_price INT,
         bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (user_id,bid_info_id,bid_price),
-        FOREIGN KEY (user_id) REFERENCES user_info(user_id)
+        PRIMARY KEY (bid_id),
+        FOREIGN KEY (user_id) REFERENCES user_info(user_id),
+        FOREIGN KEY (bid_info_id) REFERENCES bid_info(bid_info_id)
      );
 
 
@@ -131,11 +133,13 @@ BEGIN
         DECLARE s_id,b_id INT;
         DECLARE ise Boolean;
 
-		SELECT user_id into s_id from item inner join bid_info using(item_id) where bid_info_id = NEW.bid_info_id;
-        SELECT user_id into b_id from bid_info inner join bid using(bid_info_id) where NEW.cur_price = bid_price AND bid_info_id = NEW.bid_info_id;
+		
         SELECT issell into ise from bid_info where OLD.issell = false AND NEW.issell = true AND bid_info_id = NEW.bid_info_id;
 
         IF ise = true AND NEW.bid_num <> 0 THEN
+		SELECT user_id into s_id from item inner join bid_info using(item_id) where bid_info_id = NEW.bid_info_id;
+        SELECT user_id into b_id from bid_info inner join bid using(bid_info_id) where NEW.cur_price = bid_price AND bid_info_id = NEW.bid_info_id;
+			
 		INSERT INTO invoice(seller_id,buyer_id,successful_bid_price,bid_info_id) VALUES(s_id,b_id,NEW.cur_price,NEW.bid_info_id); 
         END IF;
 END$$
@@ -153,7 +157,7 @@ END $$
 
 DELIMITER ;
 
-#SET GLOBAL event_scheduler = ON;
+SET GLOBAL event_scheduler = ON;
 
 DROP EVENT IF EXISTS bid_scheduler;
 DELIMITER $$
