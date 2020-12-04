@@ -50,7 +50,7 @@ CREATE TABLE watchlist
 
 
     
-CREATE TABLE condition
+CREATE TABLE condi
     (
         condition_id INT NOT NULL AUTO_INCREMENT,
         item_state NVARCHAR(40),

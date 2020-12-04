@@ -157,7 +157,7 @@ public final class Manager {
 		case 5:
 			check_account();
 			break;
-		case 6:
+		case 0:
 			state = false;
 			break;
 		}

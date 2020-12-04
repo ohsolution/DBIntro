@@ -1,9 +1,0 @@
-java -cp .:/usr/share/java/mysql-connector-java-8.0.22.jar auction.Main
-
-----< Login menu > 
-----(1) Login 
-----(2) Sign Up 
-----(3) Login as Administrator 
-----(4) Quit 
-----< Sign up > 
----- first name : Makefile:7: recipe for target 'run' failed

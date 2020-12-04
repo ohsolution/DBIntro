@@ -19,8 +19,10 @@ public class Home_menu extends Menu
 		this.pLine(3,"Search item","\n");
 		this.pLine(4,"Check Status of your Bid","\n");
 		this.pLine(5,"Check your Account","\n");
-		this.pLine(6,"Quit","\n");
-		while((this.index = this.getInt(6))==-1);		
+        
+        System.out.println("----(Q) Quit");
+
+		while((this.index = this.getTargetInt("","Q",1,5))==-1);		
 	}
 	
 }
