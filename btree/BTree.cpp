@@ -5,7 +5,6 @@
 using namespace std;
 
 /*
-
 // debug
 
 string arr[3] = {"ROOT","IM","LEAF"};
@@ -32,8 +31,8 @@ void BTree::showTree()
 {
     root->showNode();
 }
-
 */
+
 
 BTreeNode::BTreeNode()
 {
@@ -96,13 +95,16 @@ void BTreeLeafNode::printLeafNode()
     cout<<keys[nk-1];
 }
 
-void BTreeLeafNode::printrange(int upper_limit,int idx=0)
+bool BTreeLeafNode::printrange(int upper_limit,int idx=0)
 {
+    bool ret = true;
     for(int i=idx;i<nk&&(keys[i]<upper_limit);++i)
     {
         if(i!=idx) cout<<", ";
         cout << keys[i];
+        ret &= false;
     }
+    return ret;
 }
 
 void BTree::pointQuery(long long value)
@@ -118,12 +120,13 @@ void BTree::rangeQuery(long long low,long long high)
     pos tlow = root->find(low);
     pos thigh = root->find(high);
 
-    tlow.leaf->printrange(high,tlow.p);
+    bool first= tlow.leaf->printrange(high,tlow.p);
 
     while(tlow.leaf != thigh.leaf)
     {        
         tlow.leaf = tlow.leaf->getRight_sibling();
-        if(tlow.leaf != thigh.leaf || thigh.p) cout <<", ";
+        if(first) first=false;
+        else if(tlow.leaf != thigh.leaf || thigh.p) cout <<", ";
         tlow.leaf->printrange(high);
     }
     cout <<"\n";
