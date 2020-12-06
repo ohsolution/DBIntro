@@ -14,6 +14,7 @@ int main(int argc, char* argv[]) {
   bool flag = true;
 
   while(flag){
+	  //bt.showTree(); //DEBUG
 	input >> command;
 
 	switch(command){
@@ -36,6 +37,9 @@ int main(int argc, char* argv[]) {
 		case 'p':
        			input >> value;
 			bt.printLeafNode(value);
+			break;
+		case 'S':
+			bt.showTree();
 			break;
 		case 'q':
 			flag = false;
