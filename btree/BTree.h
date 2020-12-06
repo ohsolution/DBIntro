@@ -13,18 +13,31 @@ enum NodeType {
 	LEAF
 };
 
+struct pos;
+
 class BTreeNode{   
    protected:
 	NodeType type;
+	long long keys[NUM_KEYS];
+	int nk;
+	BTreeNode * child[0];
    public:
 	BTreeNode();
 	virtual ~BTreeNode() {}
 	NodeType getNodeType();
+	pos find(long long _value);
+};
+
+class BTreeRootNode:public BTreeNode{
+   private:
+	BTreeNode* child[NUM_KEYS+1];
+   public:
+	BTreeRootNode();
+	~BTreeRootNode();
 };
 
 class BTreeInternalNode:public BTreeNode{
    private:
-	long long keys[NUM_KEYS];
 	BTreeNode* child[NUM_KEYS+1];
    public:
 	BTreeInternalNode();
@@ -33,12 +46,13 @@ class BTreeInternalNode:public BTreeNode{
 
 class BTreeLeafNode:public BTreeNode{
    private:
-	long long keys[NUM_KEYS];
 	BTreeLeafNode* right_sibling;
    public:
 	BTreeLeafNode();
 	~BTreeLeafNode();
 	void printLeafNode(); // print all keys in the current leaf node, separated by comma.
+	void printrange(int _upper_limit,int _idx);
+	BTreeLeafNode* getright_sibling();
 };
 
 
@@ -59,3 +73,9 @@ class BTree{
 	// print all found keys (low <= keys < high), separated by comma (e.g., 10, 11, 13, 15\n) 
 };
 
+struct pos
+{
+	BTreeLeafNode * leaf;	
+	long long val;
+	int p;
+};
