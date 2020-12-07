@@ -1,0 +1,24 @@
+
+type : ROOT
+nk : 4
+10 10 10 20 
+    type : LEAF
+    nk : 6
+    10 10 10 10 10 10 
+
+    type : LEAF
+    nk : 10
+    10 10 10 10 10 10 10 10 10 10 
+
+    type : LEAF
+    nk : 6
+    10 10 10 10 10 10 
+
+    type : LEAF
+    nk : 6
+    10 10 10 10 10 10 
+
+    type : LEAF
+    nk : 9
+    20 20 20 20 20 20 20 20 20 
+
