@@ -1,6 +1,6 @@
 // Please implement most of your source codes here. 
 #include "BTree.h"
-#include <bits/stdc++.h>
+#include "iostream"
 
 using namespace std;
 
@@ -33,6 +33,43 @@ void BTree::showTree()
     root->showNode();
 }
 */
+
+void swap(int x, int y) {if(x!=y) x^=y^=x^=y;}
+
+void swap(void * x,void * y)
+{
+    void * tmp = y;
+    y = x;
+    x = tmp;
+}
+
+int upper_bound(long long arr[], int n, long long val) 
+{
+    int l = 0;
+    int h = n;
+    int mid;
+    while (l < h) 
+    {
+        mid =  l + (h - l) / 2;
+        if (val >= arr[mid]) l = mid + 1;
+        else h = mid;        
+    }
+    return l;
+}
+
+int lower_bound(long long arr[], int n, long long val) 
+{
+    int l = 0;
+    int h = n;
+    int mid;
+    while (l < h) 
+    {
+        mid =  l + (h - l) / 2;
+        if (val <= arr[mid]) h = mid;
+        else l = mid + 1;        
+    }
+    return l;
+}
 
 BTreeNode::BTreeNode()
 {
@@ -86,14 +123,14 @@ pos BTreeNode::find(long long value)
     {
         pos ret;
         ret.leaf = (BTreeLeafNode*)this;
-        ret.p = lower_bound(keys,keys+nk,value)-keys;
+        ret.p = lower_bound(keys,nk,value);
 
         ret.val = (ret.p != nk) ? keys[ret.p] : -1;
 
         return ret;
     }
 
-    return child[upper_bound(keys,keys+nk,value)-keys]->find(value);
+    return child[upper_bound(keys,nk,value)]->find(value);
 }
 
 void BTreeLeafNode::printLeafNode()

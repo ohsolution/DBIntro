@@ -33,9 +33,9 @@ int main(int argc, char* argv[]) {
 //       		input >> value;
 //			bt.remove(value);
 //			break;
-//		case 'S':
-//			bt.showTree();
-//			break;
+		case 'S':
+			bt.showTree();
+			break;
 		case 'p':
        			input >> value;
 			bt.printLeafNode(value);

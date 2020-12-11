@@ -27,9 +27,9 @@ class BTreeNode{
 	BTreeNode();
 	virtual ~BTreeNode() {}
 	NodeType getNodeType();
-	pos find(long long _value);	
+	pos find(long long _value);
 	void showNode(int _pad); // For debuging
-	BTreeInternalNode * parent;
+	BTreeInternalNode * parent;	
 };
 
 class BTreeInternalNode:public BTreeNode{	
@@ -50,8 +50,8 @@ class BTreeLeafNode:public BTreeNode{
 	void printLeafNode(); // print all keys in the current leaf node, separated by comma.
 	bool printrange(int _upper_limit,int _lo,int _idx);
 	BTreeLeafNode* getRight_sibling();
-	void setRight_sibling(void * p);
 	BTreeNode * insert(long long _value);
+	void setRight_sibling(void * p);
 	BTreeLeafNode * split();
 	BTreeLeafNode* revptr;
 };
